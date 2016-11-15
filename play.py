@@ -1,4 +1,5 @@
 import tictactoe as game
+import subprocess as sp
 
 import random
 
@@ -7,13 +8,15 @@ def playGame(p1, p2):
     move = "player1"
     gameComplete = 1
     while(gameComplete == 1):
+        gameComplete = 0
+        tmp = sp.call('clear',shell=True)
         newgame.show()
         if (move == "player1"):
-            while(gameComplete != 0):
+            while(gameComplete == 0):
                 gameComplete = newgame.move(int(raw_input("Move: ")))
             move = "player2"
         else:
-            while(gameComplete != 0):
+            while(gameComplete == 0):
                 gameComplete = newgame.move(random.randrange(0, 8))
             move = "player1"
 
@@ -38,5 +41,4 @@ if __name__ == "__main__":
         for j in numarr:
             if (ret == 1):
                 ret = tester.move(j)
-        print tester.grid
         hinput = raw_input("continue? ")
