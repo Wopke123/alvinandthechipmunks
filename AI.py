@@ -21,10 +21,9 @@ def main():
 	for j in a:
 		if (ret == 1):
 			ret = tester.move(j)
+			markers, taken = getFeat(tester)
+			print markers
+			print taken
 	#print ret
-	markers, taken = getFeat(tester)
-	print markers
-	print taken
-	print tester.grid
 
 main()
