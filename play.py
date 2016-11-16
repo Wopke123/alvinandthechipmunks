@@ -1,5 +1,5 @@
 import tictactoe as game
-import subprocess as sp
+import AI
 
 import random
 
@@ -17,21 +17,24 @@ def playGame(p1, p2):
     gameComplete = 1
     while(gameComplete == 1):
         gameComplete = 0
-        tmp = sp.call('clear',shell=True)
-        newgame.show()
         while(gameComplete == 0):
-            gameComplete = newgame.move(makeMove(move[0]))
+            gameComplete = newgame.move(makeMove(move[0], newgame))
         move = switchTurn(move, p1, p2)
 
 #playGame helper functions 
 
-def makeMove(ptype):
+#returns the position of the desired move, calling the
+#appropriate function given the player type. (Human asks
+#for stdin, AI calls the AI, etc.)
+def makeMove(ptype, board):
     if(ptype == 'h'):
+        board.show()
         return int(raw_input("Move: "))
     elif(ptype == 'a'):
-        return random.randrange(0, 8)   #this is where the AI should move
+        return AI.returnRandom(board)
     return 0
 
+#given the current turn, swaps to the next turn
 def switchTurn(move, p1, p2):
     if(move[1] == "p1"):
         return [p2, "p2"]
@@ -45,13 +48,15 @@ if __name__ == "__main__":
     #Step 2: maximize reward from moves
     #Step 3: add complexity
 
-    playGame('h', 'h')
+    playGame('a', 'h')
 
+    while(raw_input("Continue? ") != "n"):
+        playGame('a', 'a')
 
+    hinput = ""
     numarr = []
     for i in range (0, 9):
         numarr.append(i)
-    hinput = ""
     while(hinput != "n"):
         print "\nNew Test:"
         tester = game.Grid()

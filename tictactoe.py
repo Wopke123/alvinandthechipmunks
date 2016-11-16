@@ -1,4 +1,5 @@
 import random
+import subprocess as sp
 
 class Game:
     def __init__(self):
@@ -28,6 +29,7 @@ class Grid:
             self.grid.append([" ", False])  #[move, taken]
 
     def show(self):
+        tmp = sp.call('clear',shell=True)
         print " " + self.grid[0][0] + " | " + self.grid[1][0] + " | " + self.grid[2][0] 
         print "-----------"
         print " " + self.grid[3][0] + " | " + self.grid[4][0] + " | " + self.grid[5][0]
@@ -57,27 +59,27 @@ class Grid:
     def checkgrid(self):
         for i in range (0, 3):  #check vertical
             if (self.grid[i][1] and self.grid[i][0] == self.grid[i+3][0] and self.grid[i+3][0] == self.grid[i+6][0]):
-                print "Winner! Down"
                 self.show()
+                print "Winner! Down"
                 return self.grid[i][0]
         for i in (0, 3, 6):     #check horizontal
             if (self.grid[i][1] and self.grid[i][0] == self.grid[i+1][0] and self.grid[i+1][0] == self.grid[i+2][0]):
-                print "Winner! Across"
                 self.show()
+                print "Winner! Across"
                 return self.grid[i][0]
         if (self.grid[0][1] and self.grid[0][0] == self.grid[4][0] and self.grid[4][0] == self.grid[8][0]):
-            print "Winner! Diagonal 1"
             self.show()
+            print "Winner! Diagonal 1"
             return self.grid[0][0]
         if (self.grid[2][1] and self.grid[2][0] == self.grid[4][0] and self.grid[4][0] == self.grid[6][0]):
-            print "Winner! Diagonal 2"
             self.show()
+            print "Winner! Diagonal 2"
             return self.grid[2][0]
         for i in range (0, 9):
             if not(self.grid[i][1]):
                 break
             if i == 8:
-                print "Draw!"
                 self.show()
+                print "Draw!"
                 return 2
         return 1

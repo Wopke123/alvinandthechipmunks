@@ -1,6 +1,13 @@
 import tictactoe
 import random
 
+def returnRandom(board):
+    options = []
+    for i in range (0, 9):
+        if board.grid[i][1] == False:
+            options.append(i)
+    return random.choice(options)
+
 def getFeat(board):
 	markers = []
 	taken = []
@@ -12,6 +19,7 @@ def getFeat(board):
 def main():
 	test = tictactoe.Grid()
 	a = []
+        print returnRandom(test)
 	for i in range (0, 9):
 		a.append(i)
 	print "Test"
@@ -24,6 +32,6 @@ def main():
 			markers, taken = getFeat(tester)
 			print markers
 			print taken
-	#print ret
+	print ret
 
-main()
+#main()
