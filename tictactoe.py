@@ -35,6 +35,8 @@ class Grid:
         print " " + self.grid[6][0] + " | " + self.grid[7][0] + " | " + self.grid[8][0]
 
     def move(self, pos):        #Returns 0 for invalid move, 1 for continue playing, 2 for a game draw, or the player's piece for a win
+        if(pos > 8 or pos < 0):
+            return 0
         if self.player:
             if not(self.grid[pos][1]):
                 self.grid[pos][0] = "O"

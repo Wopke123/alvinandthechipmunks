@@ -3,22 +3,41 @@ import subprocess as sp
 
 import random
 
+########################################################
+#
+#playGame is the function that builds the game board and
+#is responsible for swapping turns and positioning 
+#each players moves
+#
+########################################################
+
 def playGame(p1, p2):
     newgame = game.Grid()
-    move = "player1"
+    move = [p1, "p1"]
     gameComplete = 1
     while(gameComplete == 1):
         gameComplete = 0
         tmp = sp.call('clear',shell=True)
         newgame.show()
-        if (move == "player1"):
-            while(gameComplete == 0):
-                gameComplete = newgame.move(int(raw_input("Move: ")))
-            move = "player2"
-        else:
-            while(gameComplete == 0):
-                gameComplete = newgame.move(random.randrange(0, 8))
-            move = "player1"
+        while(gameComplete == 0):
+            gameComplete = newgame.move(makeMove(move[0]))
+        move = switchTurn(move, p1, p2)
+
+#playGame helper functions 
+
+def makeMove(ptype):
+    if(ptype == 'h'):
+        return int(raw_input("Move: "))
+    elif(ptype == 'a'):
+        return random.randrange(0, 8)   #this is where the AI should move
+    return 0
+
+def switchTurn(move, p1, p2):
+    if(move[1] == "p1"):
+        return [p2, "p2"]
+    else:
+        return [p1, "p1"]
+
 
 
 if __name__ == "__main__":
@@ -26,7 +45,7 @@ if __name__ == "__main__":
     #Step 2: maximize reward from moves
     #Step 3: add complexity
 
-    playGame('h', 'a')
+    playGame('h', 'h')
 
 
     numarr = []
