@@ -98,8 +98,8 @@ if __name__ == "__main__":
     results = [0, 0, 0, 0] #X wins, O wins, Draws, num games
 
 #    while(raw_input("Continue? ") != "n"):
-    for i in range (0, 99999):
-        res = playGame([player1, 'a'], ['null', 'r'])
+    for i in range (0, 9999):
+        res = playGame([player1, 'a'], [player2, 'a'])
         results[3] += 1
         if res == "X": 
             results[0] += 1
@@ -111,10 +111,10 @@ if __name__ == "__main__":
 
     print "X:", float(results[0]) / results[3], "\tO:", float(results[1]) / results[3], "\tD:", float(results[2]) / results[3]
 
-    while(raw_input("Continue? ") != "n"):
+    while(raw_input("Continue? (p2)") != "n"):
         playGame([player1, 'a'], ['null', 'h'])
 
-    while(raw_input("Continue (p2)? ") != "n"):
+    while(raw_input("Continue (p1)? ") != "n"):
         playGame(['null', 'h'], [player2, 'a'])
 
 
