@@ -26,7 +26,7 @@ def playGame(p1, p2):
         while(gameComplete == 0):
             moveMade = makeMove(move, newgame)
             gameComplete = newgame.move(moveMade)
-        
+
         if move[1] == "p1":
             p1moves.append([temp, moveMade])
         elif move[1] == "p2":
@@ -34,17 +34,35 @@ def playGame(p1, p2):
 
         move = switchTurn(move, p1, p2)
     if gameComplete == "X":
-        p1[0].train(p1moves, True)
-        p2[0].train(p2moves, False)
+        if p1[1] == 'a':
+            p1[0].train(p1moves, True)
+        if p2[1] == 'a':
+            p2[0].train(p2moves, False)
+        if (p1[1] == 'h' or p2[1] == 'h'):
+            newgame.show()
+            print "X Wins!"
+        return "X"
     elif gameComplete == "O":
-        p1[0].train(p1moves, False)
-        p2[0].train(p2moves, True)
+        if p1[1] == 'a':
+            p1[0].train(p1moves, False)
+        if p2[1] == 'a':
+            p2[0].train(p2moves, True)
+        if (p1[1] == 'h' or p2[1] == 'h'):
+            newgame.show()
+            print "O Wins!"
+        return "O"
     else:
-        p1[0].train(p1moves, True)
-        p2[0].train(p2moves, True)
+        if p1[1] == 'a':
+            p1[0].train(p1moves, True)
+        if p2[1] == 'a':
+            p2[0].train(p2moves, True)
+        if (p1[1] == 'h' or p2[1] == 'h'):
+            newgame.show()
+            print "Draw"
+        return "D"
 
-    print p1[0].moves
-    print p2[0].moves
+#    print p1[0].moves
+#    print p2[0].moves
 
 #playGame helper functions 
 
@@ -57,6 +75,8 @@ def makeMove(ptype, board):
         return int(raw_input("Move: "))
     elif(ptype[0][1] == 'a'):
         return ptype[0][0].chooseMove(board, ptype[1])
+    elif(ptype[0][1] == 'r'):
+        return AI.returnRandom(board)
     return 0
 
 #given the current turn, swaps to the next turn
@@ -75,9 +95,29 @@ if __name__ == "__main__":
 
     player1 = AI.ai()
     player2 = AI.ai()
+    results = [0, 0, 0, 0] #X wins, O wins, Draws, num games
+
+#    while(raw_input("Continue? ") != "n"):
+    for i in range (0, 99999):
+        res = playGame([player1, 'a'], ['null', 'r'])
+        results[3] += 1
+        if res == "X": 
+            results[0] += 1
+        elif res == "O":
+            results[1] += 1
+        else:
+            results[2] += 1
+
+
+    print "X:", float(results[0]) / results[3], "\tO:", float(results[1]) / results[3], "\tD:", float(results[2]) / results[3]
 
     while(raw_input("Continue? ") != "n"):
-        playGame([player1, 'a'], [player2, 'a'])
+        playGame([player1, 'a'], ['null', 'h'])
+
+    while(raw_input("Continue (p2)? ") != "n"):
+        playGame(['null', 'h'], [player2, 'a'])
+
+
 
     #hinput = ""
     #numarr = []

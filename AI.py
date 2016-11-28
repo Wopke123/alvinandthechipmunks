@@ -10,8 +10,12 @@ class ai:
 		features = getFeat(board, player)
 		for i in range (0, len(self.moves)):
 			if features == self.moves[i][0]:
-				bestWeight = 0
-				for j in range (0,9):
+                                options = []
+                                for j in range (0, 9):
+                                        if board.grid[j][1] == False:
+                                                options.append(j)
+				bestWeight = random.choice(options)
+				for j in options:
 					if self.moves[i][0][j] > self.moves[i][0][bestWeight]:
 						bestWeight = j
 				return bestWeight
@@ -63,6 +67,7 @@ def returnRandom(board):
     return random.choice(options)
 
 def getFeat(board, player):
+        #print "Getting Feat!"
 	markers = []
 	for i in range (0, 9):
 		markers.append(board.grid[i][0])

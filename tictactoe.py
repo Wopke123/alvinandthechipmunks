@@ -59,27 +59,17 @@ class Grid:
     def checkgrid(self):
         for i in range (0, 3):  #check vertical
             if (self.grid[i][1] and self.grid[i][0] == self.grid[i+3][0] and self.grid[i+3][0] == self.grid[i+6][0]):
-                self.show()
-                print "Winner! Down"
                 return self.grid[i][0]
         for i in (0, 3, 6):     #check horizontal
             if (self.grid[i][1] and self.grid[i][0] == self.grid[i+1][0] and self.grid[i+1][0] == self.grid[i+2][0]):
-                self.show()
-                print "Winner! Across"
                 return self.grid[i][0]
         if (self.grid[0][1] and self.grid[0][0] == self.grid[4][0] and self.grid[4][0] == self.grid[8][0]):
-            self.show()
-            print "Winner! Diagonal 1"
             return self.grid[0][0]
         if (self.grid[2][1] and self.grid[2][0] == self.grid[4][0] and self.grid[4][0] == self.grid[6][0]):
-            self.show()
-            print "Winner! Diagonal 2"
             return self.grid[2][0]
         for i in range (0, 9):
             if not(self.grid[i][1]):
                 break
             if i == 8:
-                self.show()
-                print "Draw!"
                 return 2
         return 1
