@@ -110,8 +110,8 @@ if __name__ == "__main__":
             results[1] += 1
         else:
             results[2] += 1
-        if(i % (numruns/10) == 0):
-            print i * 100 / numruns
+        if(i % (numruns/20) == 0):
+            print i * 100 / numruns, "%"
 
 
     print "X:", float(results[0]) / results[3], "\tO:", float(results[1]) / results[3], "\tD:", float(results[2]) / results[3]
