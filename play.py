@@ -52,10 +52,10 @@ def playGame(p1, p2):
             print "O Wins!"
         return "O"
     else:
-        if p1[1] == 'a':
-            p1[0].train(p1moves, True)
-        if p2[1] == 'a':
-            p2[0].train(p2moves, True)
+#        if p1[1] == 'a':
+#            p1[0].train(p1moves, True)
+#        if p2[1] == 'a':
+#            p2[0].train(p2moves, True)
         if (p1[1] == 'h' or p2[1] == 'h'):
             newgame.show()
             print "Draw"
@@ -121,19 +121,3 @@ if __name__ == "__main__":
 
     while(raw_input("Continue (p1)? ") != "n"):
         playGame(['null', 'h'], [player2, 'a'])
-
-
-
-    #hinput = ""
-    #numarr = []
-    #for i in range (0, 9):
-    #    numarr.append(i)
-    #while(hinput != "n"):
-    #    print "\nNew Test:"
-    #    tester = game.Grid()
-    #    ret = 1
-    #    random.shuffle(numarr)
-    #    for j in numarr:
-    #        if (ret == 1):
-    #            ret = tester.move(j)
-    #    hinput = raw_input("continue? ")
