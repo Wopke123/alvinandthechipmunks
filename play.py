@@ -97,7 +97,7 @@ if __name__ == "__main__":
     player2 = AI.ai()
     results = [0, 0, 0, 0] #X wins, O wins, Draws, num games
 
-    numruns = 100000
+    numruns = int(raw_input("Runs: "))
  #   while(raw_input("Continue? ") != "n"):
     for i in range (0, numruns):
         res = playGame([player1, 'a'], [player2, 'a'])
