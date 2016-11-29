@@ -97,9 +97,12 @@ if __name__ == "__main__":
     player2 = AI.ai()
     results = [0, 0, 0, 0] #X wins, O wins, Draws, num games
 
-#    while(raw_input("Continue? ") != "n"):
-    for i in range (0, 9999):
+    numruns = 100000
+ #   while(raw_input("Continue? ") != "n"):
+    for i in range (0, numruns):
         res = playGame([player1, 'a'], [player2, 'a'])
+        playGame([player1, 'a'], ['null', 'r'])
+        playGame(['null', 'r'], [player2, 'a'])
         results[3] += 1
         if res == "X": 
             results[0] += 1
@@ -107,6 +110,8 @@ if __name__ == "__main__":
             results[1] += 1
         else:
             results[2] += 1
+        if(i % (numruns/10) == 0):
+            print i * 100 / numruns
 
 
     print "X:", float(results[0]) / results[3], "\tO:", float(results[1]) / results[3], "\tD:", float(results[2]) / results[3]

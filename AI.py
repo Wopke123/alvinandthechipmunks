@@ -1,5 +1,6 @@
 import tictactoe
 import random
+import math
 
 class ai:
     def __init__(self):    
@@ -10,10 +11,10 @@ class ai:
         features = getFeat(board, player)
         for i in range (0, len(self.moves)):
             if features == self.moves[i][0]:
-                                options = []
-                                for j in range (0, 9):
-                                        if board.grid[j][1] == False:
-                                                options.append(j)
+                options = []
+                for j in range (0, 9):
+                    if board.grid[j][1] == False:
+                        options.append(j)
                 bestWeight = random.choice(options)
                 for j in options:
                     if self.moves[i][0][j] > self.moves[i][0][bestWeight]:
@@ -27,16 +28,16 @@ class ai:
                 found = False
                 for j in range(0, len(self.moves)):
                     if i[0] == self.moves[j][0]:
-                        self.moves[j][1][i[1]] += 1
+                        self.moves[j][1][i[1]] = hyptan(self.moves[j][1][i[1]] + reward(j))
                         found = True
                         break
                 if found == False:
                     tempWeight = []
                     for h in range(0,9):
                         if h == i[1]:
-                            tempWeight.append(1)
+                            tempWeight.append(0.05)
                         else:
-                            tempWeight.append(0)
+                            tempWeight.append(0.0)
                     self.moves.append([i[0], tempWeight])
 
         elif win == False:
@@ -44,20 +45,24 @@ class ai:
                 found = False
                 for j in range(0, len(self.moves)):
                     if i[0] == self.moves[j][0]:
-                        self.moves[j][1][i[1]] -= 1
+                        self.moves[j][1][i[1]] = hyptan(self.moves[j][1][i[1]] - reward(j))
                         found = True
                         break
                 if found == False:
                     tempWeight = []
                     for h in range(0,9):
                         if h == i[1]:
-                            tempWeight.append(-1)
+                           tempWeight.append(-0.05)
                         else:
                             tempWeight.append(0)
                     self.moves.append([i[0], tempWeight])
 
 
+def reward(iter):
+    return math.exp(-0.21*(iter+10))
 
+def hyptan(a):
+    return math.tanh(a)
 
 def returnRandom(board):
     options = []
