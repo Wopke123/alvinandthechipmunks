@@ -110,13 +110,22 @@ if __name__ == "__main__":
             results[1] += 1
         else:
             results[2] += 1
-        if(i % (numruns/20) == 0):
+        if(numruns >= 100 and i % (numruns/20) == 0):
             print i * 100 / numruns, "%"
 
+    p1rand = []
+    p2rand = []
+    for i in range(0, 10):
+        p1rand.append(random.choice(player1.moves))
+        p2rand.append(random.choice(player2.moves))
+    for i in p1rand:
+        print i
+    for i in p2rand:
+        print i
 
     print "X:", float(results[0]) / results[3], "\tO:", float(results[1]) / results[3], "\tD:", float(results[2]) / results[3]
 
-    while(raw_input("Continue? (p2)") != "n"):
+    while(raw_input("Continue (p2)? ") != "n"):
         playGame([player1, 'a'], ['null', 'h'])
 
     while(raw_input("Continue (p1)? ") != "n"):

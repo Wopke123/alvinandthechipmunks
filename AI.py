@@ -16,10 +16,14 @@ class ai:
                     if board.grid[j][1] == False:
                         options.append(j)
                 bestWeight = random.choice(options)
+                bestoptions = []
                 for j in options:
                     if self.moves[i][0][j] > self.moves[i][0][bestWeight]:
                         bestWeight = j
-                return bestWeight
+                for j in options:
+                    if self.moves[i][0][j] > (self.moves[i][0][bestWeight] - 0.05):
+                        bestoptions.append(j)
+                return random.choice(bestoptions)
         return returnRandom(board)
 
     def train(self, hist, win):
@@ -28,14 +32,16 @@ class ai:
                 found = False
                 for j in range(0, len(self.moves)):
                     if i[0] == self.moves[j][0]:
-                        self.moves[j][1][i[1]] = hyptan(self.moves[j][1][i[1]] + reward(j))
+                        self.moves[j][1][i[1]] = sigmoid(self.moves[j][1][i[1]] + reward(j))
                         found = True
                         break
                 if found == False:
                     tempWeight = []
                     for h in range(0,9):
                         if h == i[1]:
-                            tempWeight.append(0.05)
+                            tempWeight.append(0.6)
+                        elif(i[0][h] == 0):
+                            tempWeight.append(0.5)
                         else:
                             tempWeight.append(0.0)
                     self.moves.append([i[0], tempWeight])
@@ -45,24 +51,28 @@ class ai:
                 found = False
                 for j in range(0, len(self.moves)):
                     if i[0] == self.moves[j][0]:
-                        self.moves[j][1][i[1]] = hyptan(self.moves[j][1][i[1]] - reward(j))
+                        self.moves[j][1][i[1]] = sigmoid(self.moves[j][1][i[1]] - reward(j))
                         found = True
                         break
                 if found == False:
                     tempWeight = []
                     for h in range(0,9):
                         if h == i[1]:
-                           tempWeight.append(-0.05)
+                           tempWeight.append(0.4)
+                        elif(i[0][h] == 0):
+                            tempWeight.append(0.5)
                         else:
-                            tempWeight.append(0)
+                            tempWeight.append(0.0)
                     self.moves.append([i[0], tempWeight])
 
 
 def reward(iter):
     return math.exp(-0.21*(iter+10))
 
-def hyptan(a):
-    return math.tanh(a)
+def sigmoid(a):
+    temp = 1 / (1 + math.exp(-(a - 0.5) * 5))
+    #print temp
+    return temp
 
 def returnRandom(board):
     options = []
