@@ -7,6 +7,16 @@ class ai:
         #this vector will contain the previously seen states, and the weight vector
         self.moves = []
 
+    def loadSave(self, savefile):
+        f = open(savefile, 'r')
+        for i in f:
+            self.moves.append(i)
+
+    def saveSelf(self, savefile):
+        f = open(savefile, 'a')
+        for i in self.moves:
+            f.write(str(i) + "\n")
+
     def chooseMove(self, board, player):
         features = getFeat(board, player)
         for i in range (0, len(self.moves)):

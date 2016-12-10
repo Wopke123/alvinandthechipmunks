@@ -94,7 +94,11 @@ if __name__ == "__main__":
     #Step 3: add complexity
 
     player1 = AI.ai()
+    p1save = 'p1save'
+    player1.loadSave(p1save)
     player2 = AI.ai()
+    p2save = 'p2save'
+    player2.loadSave(p2save)
     results = [0, 0, 0, 0] #X wins, O wins, Draws, num games
 
     numruns = int(raw_input("Runs: "))
@@ -130,3 +134,6 @@ if __name__ == "__main__":
 
     while(raw_input("Continue (p1)? ") != "n"):
         playGame(['null', 'h'], [player2, 'a'])
+
+    player1.saveSelf(p1save)
+    player2.saveSelf(p2save)
