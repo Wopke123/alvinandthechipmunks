@@ -1,0 +1,44 @@
+\documentclass{article}
+\usepackage{times}
+\usepackage{graphicx}
+\usepackage{subfigure}
+\usepackage{natbib}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+\usepackage{hyperref}
+\newcommand{\theHalgorithm}{\arabic{alorithm}}
+\usepackage{icml2015}
+\usepackage{multicol}
+\usepackage{bbm}
+\usepackage{amsmath}
+\icmltitlerunning{Final Project}
+\begin{document}
+
+\twocolumn[
+\icmltitle{Final Project}
+\icmlauthor{Joshua Rinaldi, Carlos Lawrence}{joshua.rinaldi@colorado.edu, carlos.lawrence@colorado.edu}
+\vskip 0.3in
+]
+
+\begin{center}
+Joshua Rinaldi, joshua.rinaldi@colorado.edu\\
+Carlos Lawrence, carlos.lawrence@colorado.edu
+\end{center} 
+\vskip 0.3in
+
+\begin{abstract}
+One popular area of research in Machine Learning is teaching a computer how best to play a game. People have done this on games such as Super Mario World, Battleship and Brick Breaker. We set out to create a program that would play tic-tac-toe game that would learn as it played the game more on and be able to eventually beat a human player.
+\end{abstract}
+
+\section*{Introduction}
+When on Google, if one were to search for "Machine Learning Tic Tac Toe" a multitude of results would come up. There are numerous results that can be found which give tutorials on how to train a model to play tic tac toe. There are also some links that will take you to a tic tac toe game where you play against a machine. We wanted to do the same on our own, and then eventually train the model against itself, interested to see if both "players" would become equally proficient at the game, or if one player would become drastically better than the other. We started out by making our own implementation of tic tac toe and then later on added in a computer player using Reinforcement Learning to learn how to play the game and compete with both human and computer players.
+
+\section*{Related Works}
+One person, Christopher J. MacLellan made a project that was almost exactly the same as what we set out to do, his process was different, but the end result was the same. There are also plenty of other examples readily available after an internet search where people have programmed a computer to play and learn how to play tic tac toe. In addition to this, there are multitudes of tic tac toe games where there is an option to play against a computer, and while we cannot say for sure if these games use Machine Learning, it can be a safe guess that there are some that do. \\
+Machine Learning is not new to the video game world. As mentioned before, it is a very popular practice for a person to write a program to play a game as a project, there are also many video games in existence where the computer will learn how you play and how to counter your actions in the game. Implementation of Machine Learning into video games is something that can be fun for the developer, and make the game more challenging for the player.
+
+\section*{Playing Tic Tac Toe}
+Our model uses the full game board state to determine the best next move. The state of the board is recorded as an array with a 0 for an unclaimed space, a -1 for a space claimed by the other player, and a 1 for a space claimed by the current player. Each player has a vector that represents the board in this manner, so Player 1's vector would be the inverse of player 2's, and it is this vector that is altered after each move. \\
+As the game moves on, each player's history is also stored in a vector. The history is essentially a snapshot of the game board at the start of a player's turn, and the move that the player made at that turn. It is this vector of histories which is used by the computer to learn how to play the game.
+ 
+\end{document}
