@@ -36,40 +36,40 @@ def playGame(p1, p2, p1AImodel, p2AImodel):
         move = switchTurn(move, p1, p2)
     if gameComplete == "X":
         if p1[1] == 'a':
-            p1[0].train(p1moves, True)
+            p1[0].train(p1moves, 'p1', True)
         if p2[1] == 'a':
-            p2[0].train(p2moves, False)
+            p2[0].train(p2moves, 'p2', False)
         if (p1[1] == 'h' or p2[1] == 'h'):
             if(p1[1] == 'h'):
-                p1AImodel.train(p1moves, True)
+                p1AImodel.train(p1moves, 'p1', True)
             if(p2[1] == 'h'):
-                p2AImodel.train(p2moves, False)
+                p2AImodel.train(p2moves, 'p2', False)
             newgame.show()
             print "X Wins!"
         return "X"
     elif gameComplete == "O":
         if p1[1] == 'a':
-            p1[0].train(p1moves, False)
+            p1[0].train(p1moves, 'p1', False)
         if p2[1] == 'a':
-            p2[0].train(p2moves, True)
+            p2[0].train(p2moves, 'p2', True)
         if (p1[1] == 'h' or p2[1] == 'h'):
             if(p1[1] == 'h'):
-                p1AImodel.train(p1moves, False)
+                p1AImodel.train(p1moves, 'p1', False)
             if(p2[1] == 'h'):
-                p2AImodel.train(p2moves, True)
+                p2AImodel.train(p2moves, 'p2', True)
             newgame.show()
             print "O Wins!"
         return "O"
     else:
         if p1[1] == 'a':
-            p1[0].train(p1moves, True)
+            p1[0].train(p1moves, 'p1', True)
         if p2[1] == 'a':
-            p2[0].train(p2moves, True)
+            p2[0].train(p2moves, 'p2', True)
         if (p1[1] == 'h' or p2[1] == 'h'):
             if(p1[1] == 'h'):
-                p1AImodel.train(p1moves, True)
+                p1AImodel.train(p1moves, 'p1', True)
             if(p2[1] == 'h'):
-                p2AImodel.train(p2moves, True)
+                p2AImodel.train(p2moves, 'p2', True)
             newgame.show()
             print "Draw"
         return "D"
@@ -133,23 +133,24 @@ if __name__ == "__main__":
             while(raw_input("Continue? ") != "n"):
                 playGame([p1model, 'a'], ['null', 'h'], p1model, p2model)
                 raw_input("Press enter to continue...")
-                playGame(['null', 'h'], [model, 'a'], p1model, p2model)
+                playGame(['null', 'h'], [p2model, 'a'], p1model, p2model)
 
         for i in range (0, numruns):
-            res = playGame([p1model, 'a'], [p2model, 'a'], p1model, p2model)
             playGame([p1model, 'a'], ['null', 'r'], p1model, p2model)
             playGame(['null', 'r'], [p2model, 'a'], p1model, p2model)
+            playGame(['null', 'r'], ['null', 'r'], p1model, p2model)
             results[3] += 1
+            res = playGame([p1model, 'a'], [p2model, 'a'], p1model, p2model)
             if res == "X": 
                 results[0] += 1
             elif res == "O":
                 results[1] += 1
             else:
                 results[2] += 1
-            #if(numruns >= 100 and i % (numruns/100) == 0):
-            #    print i * 100 / numruns, "% "
+            if(numruns >= 100 and i % (numruns/100) == 0):
+                print i * 100 / numruns, "% "
 
-        #print "X:", float(results[0]) / results[3], "\tO:", float(results[1]) / results[3], "\tD:", float(results[2]) / results[3]
+        print "X:", float(results[0]) / results[3], "\tO:", float(results[1]) / results[3], "\tD:", float(results[2]) / results[3]
 
         if(humantest):
             while(raw_input("Continue (p2)? ") != "n"):

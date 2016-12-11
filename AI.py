@@ -1,88 +1,114 @@
 import tictactoe
 import random
 import math
+from os import remove
 
 class ai:
     def __init__(self):    
         #this vector will contain the previously seen states, and the weight vector
-        self.moves = []
+        self.moves = {}
 
     def loadSave(self, savefile):
-        f = open(savefile, 'r')
-        for i in f:
-            self.moves.append(i)
+        try:
+            f = open(savefile, 'r')
+            for i in f:
+                a, b = i.strip('\n').split('#')
+                d = []
+                d = b.split('|')
+                for i in range(0, len(d)):
+                    d[i] = float(d[i])
+                self.moves[a] = d
+        except:
+            print "Load Error"
+            return
 
     def saveSelf(self, savefile):
-        f = open(savefile, 'a')
+        f = open(savefile, 'w+')
+        f.truncate()
+        print len(self.moves)
         for i in self.moves:
-            f.write(str(i) + "\n")
+            tempstr = i + '#'
+            tempWeight = self.moves[i]
+            for j in range(0, len(tempWeight) - 1):
+                tempstr += str(tempWeight[j]) + '|'
+            tempstr += str(tempWeight[len(tempWeight) - 1]) + '\n'
+            f.write(tempstr)
 
     def chooseMove(self, board, player):
         features = getFeat(board, player)
-        for i in range (0, len(self.moves)):
-            if features == self.moves[i][0]:
-                options = []
-                for j in range (0, 9):
-                    if board.grid[j][1] == False:
-                        options.append(j)
-                bestWeight = random.choice(options)
-                bestoptions = []
-                for j in options:
-                    if self.moves[i][0][j] > self.moves[i][0][bestWeight]:
-                        bestWeight = j
-                for j in options:
-                    if self.moves[i][0][j] > (self.moves[i][0][bestWeight] - 0.05):
-                        bestoptions.append(j)
-                return random.choice(bestoptions)
-        return returnRandom(board)
+        found = self.moves.get(features)
+        if(found != None):
+            options = []
+            for j in range (0, 9):
+                if board.grid[j][1] == False:
+                    options.append(j)
+            bestWeight = random.choice(options)
+            bestoptions = []
+            for j in options:
+                if found[j] > found[bestWeight]:
+                    bestWeight = j
+            for j in options:
+                if found[j] > (found[bestWeight] - 0.05):
+                    bestoptions.append(j)
+            return random.choice(bestoptions)
+        else:
+            return returnRandom(board)
 
-    def train(self, hist, win):
+    def train(self, hist, player, win):
         if win == True:
+            reversedhist = []
             for i in reversed(hist):
-                found = False
-                for j in range(0, len(self.moves)):
-                    if i[0] == self.moves[j][0]:
-                        self.moves[j][1][i[1]] = sigmoid(self.moves[j][1][i[1]] + reward(j))
-                        found = True
-                        break
-                if found == False:
+                reversedhist.append(i)
+            for i in range (0, len(reversedhist)):
+                tempstr = ''
+                for j in range(0, len(reversedhist[i]) - 2):
+                    tempstr += str(reversedhist[i][j]) + '|'
+                tempstr += str(reversedhist[i][len(reversedhist[i]) - 2])
+                move = int(reversedhist[i][len(reversedhist[i]) - 1])
+                found = self.moves.get(tempstr)
+                if(found == None):
                     tempWeight = []
                     for h in range(0,9):
-                        if h == i[1]:
+                        if h == move:
                             tempWeight.append(0.6)
-                        elif(i[0][h] == 0):
+                        elif(reversedhist[i][0][h] == 0):
                             tempWeight.append(0.5)
                         else:
                             tempWeight.append(0.0)
-                    self.moves.append([i[0], tempWeight])
+                    self.moves[tempstr] = tempWeight
+                else:
+                    found[move] = sigmoid(found[move] + (reward(i / 10)))
+                    self.moves[tempstr] = found
 
         elif win == False:
-            for i in hist:
-                found = False
-                for j in range(0, len(self.moves)):
-                    if i[0] == self.moves[j][0]:
-                        self.moves[j][1][i[1]] = sigmoid(self.moves[j][1][i[1]] - reward(j))
-                        found = True
-                        break
-                if found == False:
+            for i in range(0, len(hist)):
+                tempstr = ''
+                for j in range(0, len(hist[i]) - 2):
+                    tempstr += str(hist[i][j]) + '|'
+                tempstr += str(hist[i][len(hist[i]) - 2])
+                move = int(hist[i][len(hist[i]) - 1])
+                found = self.moves.get(tempstr)
+                if(found == None):
                     tempWeight = []
                     for h in range(0,9):
-                        if h == i[1]:
-                           tempWeight.append(0.4)
-                        elif(i[0][h] == 0):
+                        if h == move:
+                            tempWeight.append(0.4)
+                        elif(hist[i][0][h] == 0):
                             tempWeight.append(0.5)
                         else:
                             tempWeight.append(0.0)
-                    self.moves.append([i[0], tempWeight])
+                    self.moves[tempstr] = tempWeight
+                else:
+                    found[move] = sigmoid(found[move] - (reward(i) / 10))
+                    self.moves[tempstr] = found
 
 
 def reward(iter):
     return math.exp(-0.21*(iter+10))
 
 def sigmoid(a):
-    temp = 1 / (1 + math.exp(-(a - 0.5) * 5))
-    #print temp
-    return temp
+#    return 1 / (1 + math.exp(-(a - 0.5) * 5))
+    return 1 / (1 + math.exp(a))
 
 def returnRandom(board):
     options = []
@@ -92,7 +118,7 @@ def returnRandom(board):
     return random.choice(options)
 
 def getFeat(board, player):
-        #print "Getting Feat!"
+    tempstr = ''
     markers = []
     for i in range (0, 9):
         markers.append(board.grid[i][0])
@@ -111,15 +137,7 @@ def getFeat(board, player):
                 markers[i] = 1
             else:
                 markers[i] = 0
-    return markers
-
-#def main():
-#    board = [["X", True], [" ", False], ["O", True], [" ", False], ["X", True], ["O", True], [" ", False], [" ", False], [" ", False]]
-#    p1 = "p1"
-#    p2 = "p2"
-#    p1m = getFeat(board, p1)
-#    p2m = getFeat(board, p2)
-#    print p1m
-#    print p2m
-
-#main()
+    for j in range(0, len(markers) - 1):
+        tempstr += str(markers[j]) + '|'
+    tempstr += str(markers[len(markers) - 1])
+    return tempstr
