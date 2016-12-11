@@ -11,6 +11,12 @@
 \usepackage{multicol}
 \usepackage{bbm}
 \usepackage{amsmath}
+\usepackage{hanging}
+\usepackage{setspace}
+\usepackage{etoolbox}
+\usepackage{graphicx}
+\AtBeginEnvironment{hangparas}{\singlespacing}
+\AfterEndEnvironment{hangparas}{\addvspace{0.67\baselineskip}}
 \icmltitlerunning{Final Project}
 \begin{document}
 
@@ -54,10 +60,13 @@ The third function that we tried was a hyperbolic tangential function. The advan
 \subsection{Second Sigmoid Function}
 The new function that we used was a modified version of the sigmoid function. It is:
 \[\frac{1}{1 + e^{(-(a-0.5) * 5)}}\]
-\\
-Insert graphs \\ \\
 
 The reason that we opted to use this function as opposed to a traditional sigmoid function is that a traditional sigmoid function would cluster the majority of our results between 0.5 and 0.7, and as the model ran longer and longer, the grouping of these results would begin to get tighter and tighter around 0.6. Instead, with the function that we use it keeps our results even distributed in the range of (-1, 1) and allows for much cleaner numbers to work with. The reason that this works better for our model is that in our model we can look at the highest value in our weight vector and take into consideration all values around it. This will allow for the model to choose options other than those with the absolute highest weight and therefore avoid getting stuck on certain moves, preventing overfitting. It is far easier to differentiate these values under the new sigmoid function, with a wider range of values, than to do so on the original sigmoid function which had a much tighter spread.
+
+\includegraphics[scale=0.7]{sigmoid.png} \\
+Graph of a regular Sigmoid Function. \\
+\includegraphics[scale=0.85]{newSigmoid.png} \\
+Graph of our Sigmoid Function
 
 \section{Analysis}
 With no real bench mark against which to compare our program it is difficult to compare the end results of some of our tests. There are certainly inefficiencies in how we have written our model, which can be clearly seen in that after several hundred thousand runs it is still very easy to beat the computer, and the computer still tends to make moves that a human player would never make, for example, not blocking an obvious win for an opponent, or not taking a game winning move when available. However, there is a marked difference when playing against the model before and after training, and the model is capable of beating a human somewhat regularly.
@@ -68,6 +77,13 @@ Moving forward there are a few things that would be interesting to look at. The 
 \section{Conclusion}
 Using Reinforcement Learning we were able to make a model that could effectively learn how to play Tic Tac Toe by being trained against itself. We tried a few different methods of finding the weight for each move and in the end settled on using a modified Sigmoid Function. 
 
-http://blog.ostermiller.org/tic-tac-toe-strategy
+\section*{References}
+
+\begin{hangparas}{0.3cm}{1}
+MacLellan, C. (2016, March 27). Teaching a Computer to Play TicTacToe [Web blog post]. Retrieved December 8, 2016, from http://www.christopia.net/blog/teaching-a-computer-to-play-tictactoe.
+\end{hangparas}
+\begin{hangparas}{0.3cm}{1}
+Ostermiller, S. (Unknown). Tic-Tac-Toe Strategy. [Web blog post]. Retrieved December 8, 2016, from http://blog.ostermiller.org/tic-tac-toe-strategy.
+\end{hangparas}
  
 \end{document}
