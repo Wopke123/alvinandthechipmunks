@@ -1,5 +1,6 @@
 import tictactoe as game
 import AI
+import sys
 
 import random
 
@@ -11,7 +12,7 @@ import random
 #
 ########################################################
 
-def playGame(p1, p2, AImodel):
+def playGame(p1, p2, p1AImodel, p2AImodel):
     newgame = game.Grid()
     p1moves = []
     p2moves = []
@@ -40,9 +41,9 @@ def playGame(p1, p2, AImodel):
             p2[0].train(p2moves, False)
         if (p1[1] == 'h' or p2[1] == 'h'):
             if(p1[1] == 'h'):
-                AImodel.train(p1moves, True)
+                p1AImodel.train(p1moves, True)
             if(p2[1] == 'h'):
-                AImodel.train(p2moves, False)
+                p2AImodel.train(p2moves, False)
             newgame.show()
             print "X Wins!"
         return "X"
@@ -53,24 +54,26 @@ def playGame(p1, p2, AImodel):
             p2[0].train(p2moves, True)
         if (p1[1] == 'h' or p2[1] == 'h'):
             if(p1[1] == 'h'):
-                AImodel.train(p1moves, False)
+                p1AImodel.train(p1moves, False)
             if(p2[1] == 'h'):
-                AImodel.train(p2moves, True)
+                p2AImodel.train(p2moves, True)
             newgame.show()
             print "O Wins!"
         return "O"
     else:
-#        if p1[1] == 'a':
-#            p1[0].train(p1moves, True)
-#        if p2[1] == 'a':
-#            p2[0].train(p2moves, True)
+        if p1[1] == 'a':
+            p1[0].train(p1moves, True)
+        if p2[1] == 'a':
+            p2[0].train(p2moves, True)
         if (p1[1] == 'h' or p2[1] == 'h'):
+            if(p1[1] == 'h'):
+                p1AImodel.train(p1moves, True)
+            if(p2[1] == 'h'):
+                p2AImodel.train(p2moves, True)
             newgame.show()
             print "Draw"
         return "D"
 
-#    print p1[0].moves
-#    print p2[0].moves
 
 #playGame helper functions 
 
@@ -110,50 +113,52 @@ if __name__ == "__main__":
     #Step 2: maximize reward from moves
     #Step 3: add complexity
 
-    model = AI.ai()
-    modelsave = 'modelsave'
-    model.loadSave(modelsave)
-    results = [0, 0, 0, 0] #X wins, O wins, Draws, num games
+    #Args = Numruns, p1 save file, p2 save file, human testing? (bool)
+    if(len(sys.argv) == 5):
+        try:
+            numruns = int(sys.argv[1])
+        except ValueError:
+            "Number of runs must be a number"
+        p1save = sys.argv[2]
+        p2save = sys.argv[3]
+        humantest = bool(int(sys.argv[4]))
 
-    #while(raw_input("Continue? ") != "n"):
+        p1model = AI.ai()
+        p2model = AI.ai()
+        p1model.loadSave(p1save)
+        p2model.loadSave(p2save)
+        results = [0, 0, 0, 0] #X wins, O wins, Draws, num games
 
-    numruns = int(raw_input("Runs: "))
-    while(raw_input("Continue? ") != "n"):
-        playGame([model, 'a'], ['null', 'h'], model)
-        raw_input("Press enter to continue...")
-        playGame(['null', 'h'], [model, 'a'], model)
+        if(humantest):
+            while(raw_input("Continue? ") != "n"):
+                playGame([p1model, 'a'], ['null', 'h'], p1model, p2model)
+                raw_input("Press enter to continue...")
+                playGame(['null', 'h'], [model, 'a'], p1model, p2model)
 
-    for i in range (0, numruns):
-        res = playGame([model, 'a'], [model, 'a'], model)
-        playGame([model, 'a'], ['null', 'r'], model)
-        playGame(['null', 'r'], [model, 'a'], model)
-        results[3] += 1
-        if res == "X": 
-            results[0] += 1
-        elif res == "O":
-            results[1] += 1
-        else:
-            results[2] += 1
-        if(numruns >= 100 and i % (numruns/20) == 0):
-            print i * 100 / numruns, "%"
+        for i in range (0, numruns):
+            res = playGame([p1model, 'a'], [p2model, 'a'], p1model, p2model)
+            playGame([p1model, 'a'], ['null', 'r'], p1model, p2model)
+            playGame(['null', 'r'], [p2model, 'a'], p1model, p2model)
+            results[3] += 1
+            if res == "X": 
+                results[0] += 1
+            elif res == "O":
+                results[1] += 1
+            else:
+                results[2] += 1
+            #if(numruns >= 100 and i % (numruns/100) == 0):
+            #    print i * 100 / numruns, "% "
 
-    p1rand = []
-    p2rand = []
-    for i in range(0, 10):
-        p1rand.append(random.choice(model.moves))
-        p2rand.append(random.choice(model.moves))
-    for i in p1rand:
-        print i
-    for i in p2rand:
-        print i
+        #print "X:", float(results[0]) / results[3], "\tO:", float(results[1]) / results[3], "\tD:", float(results[2]) / results[3]
 
-    print "X:", float(results[0]) / results[3], "\tO:", float(results[1]) / results[3], "\tD:", float(results[2]) / results[3]
+        if(humantest):
+            while(raw_input("Continue (p2)? ") != "n"):
+                playGame([model, 'a'], ['null', 'h'], model)
 
-    while(raw_input("Continue (p2)? ") != "n"):
-        playGame([model, 'a'], ['null', 'h'], model)
+            while(raw_input("Continue (p1)? ") != "n"):
+                playGame(['null', 'h'], [model, 'a'], model)
 
-    while(raw_input("Continue (p1)? ") != "n"):
-        playGame(['null', 'h'], [model, 'a'], model)
-
-    model.saveSelf(modelsave)
-    model.saveSelf(modelsave)
+        p1model.saveSelf(p1save)
+        p2model.saveSelf(p2save)
+    else:
+        print "Bad Arguments"
